@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CONFIG>
-  <Compiler Value="C:\lazarus\fpc\3.0.0\bin\x86_64-win64\fpc.exe" Date="1213096608"/>
-  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -WG -l -vewnhibq -FiF:\Snake\lib\x86_64-win64 -FuF:\Snake\Units\ChangeWindowSize -FuF:\Snake\Unit\Schlange -FuF:\Snake\Unit\MoveSnake -FuC:\lazarus\lcl\units\x86_64-win64\win32 -FuC:\lazarus\lcl\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\lazarus\packager\units\x86_64-win64 -FuF:\Snake\ -FUF:\Snake\lib\x86_64-win64\ -dLCL -dLCLwin32 Snake.lpr"/>
+  <Compiler Value="C:\lazarus\fpc\3.0.2\bin\x86_64-win64\fpc.exe" Date="1247518955"/>
+  <Params Value=" -MObjFPC -Scghi -O1 -g -gl -WG -l -vewnhibq &quot;-Fi\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\lib\x86_64-win64&quot; &quot;-Fu\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Units\ChangeWindowSize&quot; &quot;-Fu\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Unit\Schlange&quot; &quot;-Fu\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Unit\MoveSnake&quot; -FuC:\lazarus\lcl\units\x86_64-win64\win32 -FuC:\lazarus\lcl\units\x86_64-win64 -FuC:\lazarus\components\lazutils\lib\x86_64-win64 -FuC:\lazarus\packager\units\x86_64-win64 &quot;-Fu\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\&quot; &quot;-FU\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\lib\x86_64-win64\&quot; -dLCL -dLCLwin32 Snake.lpr"/>
 </CONFIG>

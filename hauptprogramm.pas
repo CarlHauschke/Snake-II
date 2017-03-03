@@ -15,7 +15,7 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
-    Image1: TLabel;
+    Kopf: TLabel;
     Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
@@ -76,42 +76,41 @@ procedure TForm1.Timer1Timer(Sender: TObject);
 Var
   NewCord: integer;
 begin
-     Image1.Caption:= IntToStr(Image1.Top);
     Case MoveDirection of
     TMoveDirection.up:                        //Move Snake Up by Delta Pixels
       begin
-        NewCord := Image1.Top - Delta;
+        NewCord := Kopf.Top - Delta;
         if NewCord < 0 then                   //If snake moves out of Window Teleport down
-          Image1.Top := NewCord + WindowYSize
+          Kopf.Top := NewCord + WindowYSize
         else                                  //else just move up
-          Image1.Top := NewCord;
+          Kopf.Top := NewCord;
       end;
 
     TMoveDirection.down:                      //Move Snake Down by Delta Pixels
       begin
-        NewCord := Image1.Top + Delta;
+        NewCord := Kopf.Top + Delta;
         if NewCord > WindowYSize then         //If snake moves out of Window Teleport down
-          Image1.Top := NewCord - WindowYSize
+          Kopf.Top := NewCord - WindowYSize
         else                                  //else just move up
-          Image1.Top := NewCord;
+          Kopf.Top := NewCord;
       end;
 
     TMoveDirection.left:                      //Move Snake Left by Delta Pixels
       begin
-        NewCord := Image1.Left - Delta;
+        NewCord := Kopf.Left - Delta;
         if NewCord < 0 then                   //If snake moves out of Window Teleport down
-          Image1.Left := NewCord + WindowXSize
+          Kopf.Left := NewCord + WindowXSize
         else                                  //else just move up
-          Image1.Left := NewCord;
+          Kopf.Left := NewCord;
       end;
 
     TMoveDirection.right:                     //Move Snake Right by Delta Pixels
       begin
-        NewCord := Image1.Left + Delta;
+        NewCord := Kopf.Left + Delta;
         if NewCord > WindowXSize then         //If snake moves out of Window Teleport down
-          Image1.Left := NewCord - WindowYSize
+          Kopf.Left := NewCord - WindowYSize
         else                                  //else just move up
-          Image1.Left := NewCord;
+          Kopf.Left := NewCord;
       end;
     end;
 end;
