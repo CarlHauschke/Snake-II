@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, Forms, Controls, Graphics, Dialogs, ExtCtrls,
-  StdCtrls;
+  StdCtrls, Buttons;
 
 type
 
@@ -16,13 +16,14 @@ type
 
   // Hauptfenster
   TForm1 = class(TForm)
-    Food: TImage;
+    Start: TBitBtn;
+    Essen: TImage;
     Kopf: TImage;
-    Timer1: TTimer;
+    GameTick: TTimer;
+    procedure StartClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
-    procedure FormResize(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
+    procedure GameTickTimer(Sender: TObject);
   private
     { private declarations }
   public
@@ -47,7 +48,6 @@ const
 var
   Form1: TForm1;
   MoveDirection:TMoveDirection;
-  WindowXSize, WindowYSize:integer;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
 
 implementation
@@ -58,8 +58,38 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-  Food.top := ((random(Form1.Height)+1) div Delta)* Delta;
-  Food.left:= ((random (Form1.Width)+1) div Delta)* Delta;
+  Form1.Color:=0;
+end;
+
+procedure TForm1.StartClick(Sender: TObject);
+begin
+  // Groesse von Kopf, Essen und Schwanz an Bewegungsabstand anpassen
+  Kopf.Width := Delta;
+  Kopf.Height := Delta;
+  Essen.Width := Delta;
+  Essen.Height := Delta;
+  //Schwanz.Width := Delta;
+  //Schwanz.Height := Delta;
+
+  // Kopf an Zufällige Position platzieren platzieren
+  randomize;
+  Kopf.Top := ((random(Form1.Height)+1) div Delta)* Delta;
+  Kopf.Left := ((random (Form1.Width)+1) div Delta)* Delta;
+
+  // Essem an Zufällige Position platzieren platzieren
+  randomize;
+  Essen.Top := ((random(Form1.Height)+1) div Delta)* Delta;
+  Essen.Left := ((random (Form1.Width)+1) div Delta)* Delta;
+
+  // Start Knopf ausblenden
+  Start.Visible:=False;
+
+  // GameTick starten
+  GameTick.Enabled:=True;
+
+  // Kopf und Essen anzeigen
+  Kopf.Visible := True;
+  Essen.Visible := True;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -77,21 +107,7 @@ begin
   end;
 end;
 
-procedure TForm1.FormResize(Sender: TObject);
-begin
-  WindowXSize := Form1.Width;
-  WindowYSize := Form1.Height;
-
-  Kopf.Width := Delta;
-  Kopf.Height := Delta;
-
-  //Kopf an Zufällige Position platzieren platzieren
-  randomize;
-  Kopf.Top := ((random(Form1.Height)+1) div Delta)* Delta;
-  Kopf.Left := ((random (Form1.Width)+1) div Delta)* Delta;
-end;
-
-procedure TForm1.Timer1Timer(Sender: TObject);
+procedure TForm1.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
 begin
@@ -100,7 +116,7 @@ begin
       begin
         NewCord := Kopf.Top - Delta;
         if NewCord < 0 then                   //If snake moves out of Window Teleport down
-          Kopf.Top := NewCord + WindowYSize
+          Kopf.Top := NewCord + Form1.Height
         else                                  //else just move up
           Kopf.Top := NewCord;
       end;
@@ -108,9 +124,9 @@ begin
     TMoveDirection.down:                      //Move Snake Down by Delta Pixels
       begin
         NewCord := Kopf.Top + Delta;
-        if NewCord > WindowYSize - Delta then         //If snake moves out of Window Teleport down
+        if NewCord > Form1.Height - Delta then         //If snake moves out of Window Teleport down
                                                       // - Delta, da Position an oberer, linker Ecke gemessen wird
-          Kopf.Top := NewCord - WindowYSize
+          Kopf.Top := NewCord - Form1.Height
         else                                  //else just move down
           Kopf.Top := NewCord;
       end;
@@ -119,7 +135,7 @@ begin
       begin
         NewCord := Kopf.Left - Delta;
         if NewCord < 0 then                   //If snake moves out of Window Teleport to right border
-          Kopf.Left := NewCord + WindowXSize
+          Kopf.Left := NewCord + Form1.Width
         else                                  //else just move left
           Kopf.Left := NewCord;
       end;
@@ -127,26 +143,26 @@ begin
     TMoveDirection.right:                     //Move Snake Right by Delta Pixels
       begin
         NewCord := Kopf.Left + Delta;
-        if NewCord > WindowXSize - Delta then         //If snake moves out of Window Teleport to left border
+        if NewCord > Form1.Width - Delta then         //If snake moves out of Window Teleport to left border
                                                       // - Delta, da Position an oberer, linker Ecke gemessen wird
-          Kopf.Left := NewCord - WindowYSize
+          Kopf.Left := NewCord - Form1.Width
         else                                  //else just move right
           Kopf.Left := NewCord;
       end;
     end;
 
     // Kollision zwischen Kopf und Essen
-    if  (Food.top  = Kopf.top) and (Food.left = Kopf.left)
+    if  (Essen.top  = Kopf.top) and (Essen.left = Kopf.left)
     then
       begin
-        Food.visible:=false;
+        Essen.visible:=false;
         Score:= Score +1;
 
         // Neue Position für Essen
         randomize;
-        Food.top := ((random(Form1.Height)+1) div Delta)* Delta;
-        Food.left:= ((random (Form1.Width)+1) div Delta)* Delta;
-        Food.visible:=true;
+        Essen.top := ((random(Form1.Height)+1) div Delta)* Delta;
+        Essen.left:= ((random (Form1.Width)+1) div Delta)* Delta;
+        Essen.visible:=true;
     end;
 end;
 

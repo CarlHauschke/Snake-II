@@ -12,7 +12,6 @@ object Form1: TForm1
   Constraints.MinWidth = 500
   OnCreate = FormCreate
   OnKeyDown = FormKeyDown
-  OnResize = FormResize
   LCLVersion = '1.6.4.0'
   object Kopf: TImage
     Left = 32
@@ -621,8 +620,9 @@ object Form1: TForm1
       6D9C1B08C23A05D80000000049454E44AE426082
     }
     Stretch = True
+    Visible = False
   end
-  object Food: TImage
+  object Essen: TImage
     Left = 104
     Height = 64
     Top = 24
@@ -1229,10 +1229,21 @@ object Form1: TForm1
       E4F916F420D3873F03001B351E09C1D66A410000000049454E44AE426082
     }
     Stretch = True
+    Visible = False
   end
-  object Timer1: TTimer
+  object Start: TBitBtn
+    Left = 155
+    Height = 48
+    Top = 200
+    Width = 190
+    Caption = 'Start'
+    OnClick = StartClick
+    TabOrder = 0
+  end
+  object GameTick: TTimer
+    Enabled = False
     Interval = 150
-    OnTimer = Timer1Timer
+    OnTimer = GameTickTimer
     top = 472
   end
 end
