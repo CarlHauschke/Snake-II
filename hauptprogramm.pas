@@ -14,6 +14,7 @@ type
 
   { TForm1 }
 
+  // Hauptfenster
   TForm1 = class(TForm)
     Kopf: TImage;
     Timer1: TTimer;
@@ -26,6 +27,17 @@ type
   public
     { public declarations }
   end;
+
+  (* Schlangen Schwanz versuch, geht nicht
+  //Schlangen Schwanz
+  TSchwanz = class(TImage)
+    procedure Move();
+    private
+    var Schlangennummer, Nachfolgenummer: integer;
+    public
+    { public declarations }
+  end;
+  *)
 
 const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
