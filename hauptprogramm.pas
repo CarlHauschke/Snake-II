@@ -85,9 +85,10 @@ begin
   Kopf.Width := Delta;
   Kopf.Height := Delta;
 
-  //Kopf an oberen, linken Bildschirmrand platzieren
-  Kopf.Top := 0;
-  Kopf.Left := 0;
+  //Kopf an Zufällige Position platzieren platzieren
+  randomize;
+  Kopf.Top := ((random(Form1.Height)+1) div Delta)* Delta;
+  Kopf.Left := ((random (Form1.Width)+1) div Delta)* Delta;
 end;
 
 procedure TForm1.Timer1Timer(Sender: TObject);
