@@ -16,6 +16,7 @@ type
 
   // Hauptfenster
   TForm1 = class(TForm)
+    Food: TImage;
     Kopf: TImage;
     Timer1: TTimer;
     procedure FormCreate(Sender: TObject);
@@ -47,6 +48,7 @@ var
   Form1: TForm1;
   MoveDirection:TMoveDirection;
   WindowXSize, WindowYSize:integer;
+  Score:integer=0;                   // Speichert den aktuellen Punktestand
 
 implementation
 
@@ -56,7 +58,8 @@ implementation
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
-
+  Food.top := ((random(Form1.Height)+1) div Delta)* Delta;
+  Food.left:= ((random (Form1.Width)+1) div Delta)* Delta;
 end;
 
 procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
@@ -129,6 +132,20 @@ begin
         else                                  //else just move right
           Kopf.Left := NewCord;
       end;
+    end;
+
+    // Kollision zwischen Kopf und Essen
+    if  (Food.top  = Kopf.top) and (Food.left = Kopf.left)
+    then
+      begin
+        Food.visible:=false;
+        Score:= Score +1;
+
+        // Neue Position für Essen
+        randomize;
+        Food.top := ((random(Form1.Height)+1) div Delta)* Delta;
+        Food.left:= ((random (Form1.Width)+1) div Delta)* Delta;
+        Food.visible:=true;
     end;
 end;
 
