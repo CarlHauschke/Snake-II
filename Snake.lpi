@@ -41,7 +41,7 @@
       <Unit1>
         <Filename Value="hauptprogramm.pas"/>
         <IsPartOfProject Value="True"/>
-        <ComponentName Value="Form1"/>
+        <ComponentName Value="Hauptfenster"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="Hauptprogramm"/>

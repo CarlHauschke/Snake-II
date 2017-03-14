@@ -1248,7 +1248,7 @@ object Form1: TForm1
     Visible = False
   end
   object HUDScore: TLabel
-    Left = 144
+    Left = 148
     Height = 32
     Top = 5
     Width = 192

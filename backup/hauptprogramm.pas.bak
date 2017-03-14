@@ -33,16 +33,19 @@ type
     { public declarations }
   end;
 
-  (* Schlangen Schwanz versuch, geht nicht
+  {
   //Schlangen Schwanz
   TSchwanz = class(TImage)
-    procedure Move();
+    procedure Bewegen;
+    procedure SchwanzCreate(Sender: TImage);
     private
-    var Schlangennummer, Nachfolgenummer: integer;
-    public
+    var Schlangennummer: integer;
+  private
+    { private declarations }
+  public
     { public declarations }
   end;
-  *)
+  }
 
 const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
@@ -52,6 +55,7 @@ var
   Form1: TForm1;
   MoveDirection:TMoveDirection;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
+  //Schwanz: TSchwanz;
 
 implementation
 
@@ -69,6 +73,7 @@ end;
 
 procedure TForm1.FormCreate(Sender: TObject);
 begin
+  //Schwanz.SchwanzCreate(Schwanz);
   Form1.Color:=0;
   Form1.Top:= (Screen.Height - Form1.Height) div 2;
   Form1.Left:= (Screen.Width - Form1.Width) div 2;
@@ -177,6 +182,24 @@ begin
         Essen.visible:=true;
     end;
 end;
+
+{
+{ TSchwanz }
+
+procedure TSchwanz.Bewegen;
+begin
+
+end;
+
+procedure TSchwanz.SchwanzCreate(Sender: TImage);
+begin
+  //Sender.Picture.LoadFromFile('\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Bilder\Schwanz1.png');
+  Sender.Top:=100;
+  Sender.Height:=100;
+  Sender.Width:=Delta;
+  Sender.Height:=Delta;
+  Sender.Stretch:=true;
+end;}
 
 end.
 
