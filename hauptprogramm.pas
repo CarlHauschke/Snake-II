@@ -16,6 +16,9 @@ type
 
   // Hauptfenster
   TForm1 = class(TForm)
+    HUDScore: TLabel;
+    HUDTextScore: TLabel;
+    HUDTrenner: TShape;
     Start: TBitBtn;
     Essen: TImage;
     Kopf: TImage;
@@ -56,9 +59,19 @@ implementation
 
 { TForm1 }
 
+function RandomCord(Sender: TImage): boolean;
+begin
+  randomize;
+  Sender.Top:= ((random(Form1.Height - (Form1.HUDTrenner.Top + Form1.HUDTrenner.Height)) + (Form1.HUDTrenner.Top + Form1.HUDTrenner.Height)) div Delta)* Delta;
+  Sender.Left:= (random(Form1.Height) div Delta)* Delta;
+  //(Form1.HUDTrenner.Top + TShape.HUDTrenner.Height)
+end;
+
 procedure TForm1.FormCreate(Sender: TObject);
 begin
   Form1.Color:=0;
+  Form1.Top:= (Screen.Height - Form1.Height) div 2;
+  Form1.Left:= (Screen.Width - Form1.Width) div 2;
 end;
 
 procedure TForm1.StartClick(Sender: TObject);
@@ -71,18 +84,18 @@ begin
   //Schwanz.Width := Delta;
   //Schwanz.Height := Delta;
 
-  // Kopf an Zufällige Position platzieren platzieren
-  randomize;
-  Kopf.Top := ((random(Form1.Height)+1) div Delta)* Delta;
-  Kopf.Left := ((random (Form1.Width)+1) div Delta)* Delta;
-
-  // Essem an Zufällige Position platzieren platzieren
-  randomize;
-  Essen.Top := ((random(Form1.Height)+1) div Delta)* Delta;
-  Essen.Left := ((random (Form1.Width)+1) div Delta)* Delta;
+  // Kopf, Essen an Zufällige Position platzieren platzieren
+  RandomCord(Kopf);
+  RandomCord(Essen);
 
   // Start Knopf ausblenden
   Start.Visible:=False;
+
+  // HUD Einblenden
+  HUDTrenner.Visible:=true;
+  HUDTextScore.Visible:=true;
+  HUDScore.Visible:=true;
+  HUDScore.Caption:=inttostr(Score);
 
   // GameTick starten
   GameTick.Enabled:=True;
@@ -115,8 +128,8 @@ begin
     TMoveDirection.up:                        //Move Snake Up by Delta Pixels
       begin
         NewCord := Kopf.Top - Delta;
-        if NewCord < 0 then                   //If snake moves out of Window Teleport down
-          Kopf.Top := NewCord + Form1.Height
+        if NewCord < (HUDTrenner.Top + HUDTrenner.Height) then                   //If snake moves out of Window Teleport down
+          Kopf.Top := NewCord + Form1.Height - (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move up
           Kopf.Top := NewCord;
       end;
@@ -126,7 +139,7 @@ begin
         NewCord := Kopf.Top + Delta;
         if NewCord > Form1.Height - Delta then         //If snake moves out of Window Teleport down
                                                       // - Delta, da Position an oberer, linker Ecke gemessen wird
-          Kopf.Top := NewCord - Form1.Height
+          Kopf.Top := NewCord - Form1.Height + (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move down
           Kopf.Top := NewCord;
       end;
@@ -159,9 +172,8 @@ begin
         Score:= Score +1;
 
         // Neue Position für Essen
-        randomize;
-        Essen.top := ((random(Form1.Height)+1) div Delta)* Delta;
-        Essen.left:= ((random (Form1.Width)+1) div Delta)* Delta;
+        RandomCord(Essen);
+        HUDScore.Caption:=inttostr(Score);
         Essen.visible:=true;
     end;
 end;
