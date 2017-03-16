@@ -27,25 +27,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GameTickTimer(Sender: TObject);
+    function Schwanzerstellen:boolean;
   private
     { private declarations }
   public
     { public declarations }
   end;
-
-  {
-  //Schlangen Schwanz
-  TSchwanz = class(TImage)
-    procedure Bewegen;
-    procedure SchwanzCreate(Sender: TImage);
-    private
-    var Schlangennummer: integer;
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end;
-  }
 
 const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
@@ -53,9 +40,11 @@ const
   Delta=25;
 var
   Hauptfenster: THauptfenster;
-  MoveDirection:TMoveDirection;
+  MoveDirection: TMoveDirection;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
-  //Schwanz: TSchwanz;
+  //Variaben für Snwanz
+  Schwanz: array of TImage;   //Speichert die Schwanzelemente
+  Schwanzanzahl:integer=0;   //Speichert die Anzahl an Schwanzelementen
 
 implementation
 
@@ -65,6 +54,8 @@ implementation
 
 function RandomCord(Sender: TImage): boolean;
 begin
+  //Setzt Objekt an zufällige Koordinaten Auf Bildschirm
+  //Berücksichtig HUD
   randomize;
   Sender.Top:= ((random(Hauptfenster.Height - (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) + (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) div Delta)* Delta;
   Sender.Left:= (random(Hauptfenster.Height) div Delta)* Delta;
@@ -75,6 +66,7 @@ procedure THauptfenster.FormCreate(Sender: TObject);
 begin
   //Schwanz.SchwanzCreate(Schwanz);
   Hauptfenster.Color:=0;
+  //Fenster Mittig auf Bildschirm platzieren
   Hauptfenster.Top:= (Screen.Height - Hauptfenster.Height) div 2;
   Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
 end;
@@ -86,8 +78,6 @@ begin
   Kopf.Height := Delta;
   Essen.Width := Delta;
   Essen.Height := Delta;
-  //Schwanz.Width := Delta;
-  //Schwanz.Height := Delta;
 
   // Kopf, Essen an Zufällige Position platzieren platzieren
   RandomCord(Kopf);
@@ -180,26 +170,32 @@ begin
         RandomCord(Essen);
         HUDScore.Caption:=inttostr(Score);
         Essen.visible:=true;
+
+        //Schlange anfügen
+        Schwanzerstellen;
     end;
 end;
 
-{
-{ TSchwanz }
-
-procedure TSchwanz.Bewegen;
+function THauptfenster.Schwanzerstellen: boolean;
 begin
-
+  Schwanzanzahl:=Schwanzanzahl+1;
+  if Schwanzanzahl>0 then
+  SetLength(Schwanz,Schwanzanzahl);    // Array um 1 Platz vergrößern
+  Schwanz[Schwanzanzahl]:=TImage.Create(Kopf);     // Schwanzelemnt in neuen Platz einfügen
+  with Schwanz[Schwanzanzahl] do
+  begin
+    Picture.LoadFromFile('Bilder\Schwanz1.png');
+    Top:=Kopf.Top;
+    Left:=Kopf.Left;
+    Width:=Delta;
+    Height:=Delta;
+    Stretch:=true;
+    Enabled:=true;
+    Visible:=true;
+    Parent:=Hauptfenster;                         //Ordnet Schlangenelement Hauptfenster zu
+                                                  //dadurch wird es auch erst angezeigt
+  end;
 end;
-
-procedure TSchwanz.SchwanzCreate(Sender: TImage);
-begin
-  //Sender.Picture.LoadFromFile('\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Bilder\Schwanz1.png');
-  Sender.Top:=100;
-  Sender.Height:=100;
-  Sender.Width:=Delta;
-  Sender.Height:=Delta;
-  Sender.Stretch:=true;
-end;}
 
 end.
 

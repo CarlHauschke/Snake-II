@@ -12,10 +12,10 @@ type
 
   TMoveDirection = (up,down,left,right);
 
-  { TForm1 }
+  { THauptfenster }
 
   // Hauptfenster
-  TForm1 = class(TForm)
+  THauptfenster = class(TForm)
     HUDScore: TLabel;
     HUDTextScore: TLabel;
     HUDTrenner: TShape;
@@ -27,67 +27,57 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);
     procedure GameTickTimer(Sender: TObject);
+    function Schwanzerstellen:boolean;
   private
     { private declarations }
   public
     { public declarations }
   end;
-
-  {
-  //Schlangen Schwanz
-  TSchwanz = class(TImage)
-    procedure Bewegen;
-    procedure SchwanzCreate(Sender: TImage);
-    private
-    var Schlangennummer: integer;
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end;
-  }
 
 const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
   //sowie die Groesse der Grafiken
   Delta=25;
 var
-  Form1: TForm1;
-  MoveDirection:TMoveDirection;
+  Hauptfenster: THauptfenster;
+  MoveDirection: TMoveDirection;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
-  //Schwanz: TSchwanz;
+  //Variaben für Snwanz
+  Schwanz: array of TImage;   //Speichert die Schwanzelemente
+  Schwanzanzahl:integer=0;   //Speichert die Anzahl an Schwanzelementen
 
 implementation
 
 {$R *.lfm}
 
-{ TForm1 }
+{ THauptfenster }
 
 function RandomCord(Sender: TImage): boolean;
 begin
+  //Setzt Objekt an zufällige Koordinaten Auf Bildschirm
+  //Berücksichtig HUD
   randomize;
-  Sender.Top:= ((random(Form1.Height - (Form1.HUDTrenner.Top + Form1.HUDTrenner.Height)) + (Form1.HUDTrenner.Top + Form1.HUDTrenner.Height)) div Delta)* Delta;
-  Sender.Left:= (random(Form1.Height) div Delta)* Delta;
-  //(Form1.HUDTrenner.Top + TShape.HUDTrenner.Height)
+  Sender.Top:= ((random(Hauptfenster.Height - (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) + (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) div Delta)* Delta;
+  Sender.Left:= (random(Hauptfenster.Height) div Delta)* Delta;
+  //(Hauptfenster.HUDTrenner.Top + TShape.HUDTrenner.Height)
 end;
 
-procedure TForm1.FormCreate(Sender: TObject);
+procedure THauptfenster.FormCreate(Sender: TObject);
 begin
   //Schwanz.SchwanzCreate(Schwanz);
-  Form1.Color:=0;
-  Form1.Top:= (Screen.Height - Form1.Height) div 2;
-  Form1.Left:= (Screen.Width - Form1.Width) div 2;
+  Hauptfenster.Color:=0;
+  //Fenster Mittig auf Bildschirm platzieren
+  Hauptfenster.Top:= (Screen.Height - Hauptfenster.Height) div 2;
+  Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
 end;
 
-procedure TForm1.StartClick(Sender: TObject);
+procedure THauptfenster.StartClick(Sender: TObject);
 begin
   // Groesse von Kopf, Essen und Schwanz an Bewegungsabstand anpassen
   Kopf.Width := Delta;
   Kopf.Height := Delta;
   Essen.Width := Delta;
   Essen.Height := Delta;
-  //Schwanz.Width := Delta;
-  //Schwanz.Height := Delta;
 
   // Kopf, Essen an Zufällige Position platzieren platzieren
   RandomCord(Kopf);
@@ -110,7 +100,7 @@ begin
   Essen.Visible := True;
 end;
 
-procedure TForm1.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
+procedure THauptfenster.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
   case Key of
@@ -125,7 +115,7 @@ begin
   end;
 end;
 
-procedure TForm1.GameTickTimer(Sender: TObject);
+procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
 begin
@@ -134,7 +124,7 @@ begin
       begin
         NewCord := Kopf.Top - Delta;
         if NewCord < (HUDTrenner.Top + HUDTrenner.Height) then                   //If snake moves out of Window Teleport down
-          Kopf.Top := NewCord + Form1.Height - (HUDTrenner.Top + HUDTrenner.Height)
+          Kopf.Top := NewCord + Hauptfenster.Height - (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move up
           Kopf.Top := NewCord;
       end;
@@ -142,9 +132,9 @@ begin
     TMoveDirection.down:                      //Move Snake Down by Delta Pixels
       begin
         NewCord := Kopf.Top + Delta;
-        if NewCord > Form1.Height - Delta then         //If snake moves out of Window Teleport down
+        if NewCord > Hauptfenster.Height - Delta then         //If snake moves out of Window Teleport down
                                                       // - Delta, da Position an oberer, linker Ecke gemessen wird
-          Kopf.Top := NewCord - Form1.Height + (HUDTrenner.Top + HUDTrenner.Height)
+          Kopf.Top := NewCord - Hauptfenster.Height + (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move down
           Kopf.Top := NewCord;
       end;
@@ -153,7 +143,7 @@ begin
       begin
         NewCord := Kopf.Left - Delta;
         if NewCord < 0 then                   //If snake moves out of Window Teleport to right border
-          Kopf.Left := NewCord + Form1.Width
+          Kopf.Left := NewCord + Hauptfenster.Width
         else                                  //else just move left
           Kopf.Left := NewCord;
       end;
@@ -161,9 +151,9 @@ begin
     TMoveDirection.right:                     //Move Snake Right by Delta Pixels
       begin
         NewCord := Kopf.Left + Delta;
-        if NewCord > Form1.Width - Delta then         //If snake moves out of Window Teleport to left border
+        if NewCord > Hauptfenster.Width - Delta then         //If snake moves out of Window Teleport to left border
                                                       // - Delta, da Position an oberer, linker Ecke gemessen wird
-          Kopf.Left := NewCord - Form1.Width
+          Kopf.Left := NewCord - Hauptfenster.Width
         else                                  //else just move right
           Kopf.Left := NewCord;
       end;
@@ -180,26 +170,31 @@ begin
         RandomCord(Essen);
         HUDScore.Caption:=inttostr(Score);
         Essen.visible:=true;
+
+        //Schlange anfügen
+        Schwanzerstellen;
     end;
 end;
 
-{
-{ TSchwanz }
-
-procedure TSchwanz.Bewegen;
+function THauptfenster.Schwanzerstellen: boolean;
 begin
-
+  Schwanzanzahl:=Schwanzanzahl+1;
+  SetLength(Schwanz,Schwanzanzahl);    // Array um 1 Platz vergrößern
+  Schwanz[Schwanzanzahl]:=TImage.Create(Kopf);     // Schwanzelemnt in neuen Platz einfügen
+  with Schwanz[Schwanzanzahl] do
+  begin
+    Picture.LoadFromFile('Bilder\Schwanz1.png');
+    Top:=Kopf.Top;
+    Left:=Kopf.Left;
+    Width:=Delta;
+    Height:=Delta;
+    Stretch:=true;
+    Enabled:=true;
+    Visible:=true;
+    Parent:=Hauptfenster;                         //Ordnet Schlangenelement Hauptfenster zu
+                                                  //dadurch wird es auch erst angezeigt
+  end;
 end;
-
-procedure TSchwanz.SchwanzCreate(Sender: TImage);
-begin
-  //Sender.Picture.LoadFromFile('\\Mac\Home\Documents\INFO\INFO 12\Abschlussprojekt Snake II\Bilder\Schwanz1.png');
-  Sender.Top:=100;
-  Sender.Height:=100;
-  Sender.Width:=Delta;
-  Sender.Height:=Delta;
-  Sender.Stretch:=true;
-end;}
 
 end.
 

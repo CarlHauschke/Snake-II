@@ -1,7 +1,7 @@
 object Hauptfenster: THauptfenster
-  Left = 1301
+  Left = 1330
   Height = 500
-  Top = 107
+  Top = 183
   Width = 500
   Caption = 'Snake II'
   ClientHeight = 500
