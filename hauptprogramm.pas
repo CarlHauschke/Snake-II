@@ -21,10 +21,10 @@ type
     HUDTrenner: TShape;
     HighscoreLabel: TLabel;
     LastScore: TLabel;
-    Start: TBitBtn;
     Essen: TImage;
     Kopf: TImage;
     GameTick: TTimer;
+    Start: TImage;
     procedure StartClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState);

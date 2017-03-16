@@ -191,7 +191,7 @@ begin
     end;
 
     //Schlangenmindestlänge festlegen
-    if Schwanzanzahl<Mindestlaenge then
+    if Schwanzanzahl < Mindestlaenge-1 then
       Schwanzerstellen;
 
     //Schlangenkopf bewegen
