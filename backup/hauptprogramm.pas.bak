@@ -48,6 +48,7 @@ const
 var
   Hauptfenster: THauptfenster;
   MoveDirection: TMoveDirection;
+  MoveDirectionAlt: TMoveDirection; //Überprüfung, ob neue Richtung ausgewählt
   Score:integer=0;                   // Speichert den aktuellen Punktestand
 
   //Variaben für Snwanz
@@ -107,7 +108,7 @@ begin
   Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
   //Highscore einlesen
   ScoreFile:=GetAppConfigDir(false)+'\highscore.txt';             //Datei festlegen
-  // Prüfen, ob Dateipfad existier, ansonsten anlegen
+  // Prüfen, ob Dateipfad existiert, ansonsten anlegen
   if not FileExists(ScoreFile) then
   begin
     CreateDir(GetAppConfigDir(false));
@@ -176,7 +177,7 @@ end;
 procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
-  i,high:integer;
+  i,j,high:integer;
 begin
     //alte Koordinaten aktualisieren
     Kopfcord.Left:=Kopf.Left;
@@ -191,11 +192,16 @@ begin
     Case MoveDirection of
     TMoveDirection.up:                        //Move Snake Up by Delta Pixels
       begin
+        if MoveDirectionAlt<>down then
+        begin
         NewCord := Kopf.Top - Delta;
         if NewCord < (HUDTrenner.Top + HUDTrenner.Height) then                   //If snake moves out of Window Teleport down
           Kopf.Top := NewCord + Hauptfenster.Height - (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move up
           Kopf.Top := NewCord;
+        end
+        else
+          MoveDirection:=up;
       end;
 
     TMoveDirection.down:                      //Move Snake Down by Delta Pixels
@@ -271,19 +277,23 @@ begin
           writeScore(Score);
         end;
 
-        // Menü wieder ausgeben
+        //HUD ausblenden
+        HUDTrenner.Visible:=false;
+        HUDTextScore.Visible:=false;
+        HUDScore.Visible:=false;
+
+        // Menü wieder einblenden
         Start.Visible:=True;
         HighscoreLabel.Visible:=True;
         LastScore.Visible:=True;
         LastScore.Caption:=     'Last Score:  '+ inttostr(Score);
         HighscoreLabel.Caption:='Highscore:   '+ inttostr(Highscore);
 
-        HUDTrenner.Visible:=false;
-        HUDTextScore.Visible:=false;
-        HUDScore.Visible:=false;
-
+        //Schlange und Essen ausblenden
         Kopf.Visible := false;
         Essen.Visible := false;
+        for j:= 0 to Schwanzanzahl do
+          Schwanz[j].Visible:=false;
         end;
     end;
 end;

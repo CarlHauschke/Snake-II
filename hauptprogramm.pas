@@ -107,7 +107,7 @@ begin
   Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
   //Highscore einlesen
   ScoreFile:=GetAppConfigDir(false)+'\highscore.txt';             //Datei festlegen
-  // Prüfen, ob Dateipfad existier, ansonsten anlegen
+  // Prüfen, ob Dateipfad existiert, ansonsten anlegen
   if not FileExists(ScoreFile) then
   begin
     CreateDir(GetAppConfigDir(false));
@@ -176,7 +176,7 @@ end;
 procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
-  i,high:integer;
+  i,j,high:integer;
 begin
     //alte Koordinaten aktualisieren
     Kopfcord.Left:=Kopf.Left;
@@ -286,6 +286,8 @@ begin
         //Schlange und Essen ausblenden
         Kopf.Visible := false;
         Essen.Visible := false;
+        for j:= 0 to Schwanzanzahl do
+          Schwanz[j].Visible:=false;
         end;
     end;
 end;
