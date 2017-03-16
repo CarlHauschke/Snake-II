@@ -259,7 +259,7 @@ begin
     //Kollision zwischen Kopf und Schwanz
     for i:= 0 to Schwanzanzahl do
     begin
-      if (Kopf.Top = Schwanz[i].Top) and (Kopf.Left = Schwanz[i].Left) then
+      if (Kopf.Top = Schwanz[i].Top) and (Kopf.Left = Schwanz[i].Left) and (Schwanz[i].Visible=true) then
         begin
         //------------------SPIEL ABBRUCH-----------------------
         GameTick.Enabled:=False;
@@ -301,7 +301,7 @@ begin
   Schwanz[Schwanzanzahl]:=TImage.Create(Kopf);     // Schwanzelemnt in neuen Platz einfügen
   with Schwanz[Schwanzanzahl] do
   begin
-    Picture.LoadFromFile('Bilder\Schwanz1.png');
+    Picture.LoadFromFile('Bilder\Schwanz3.png');
     Top:=50;
     Left:=50;
     Width:=Delta;

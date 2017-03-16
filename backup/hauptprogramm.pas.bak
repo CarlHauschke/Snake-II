@@ -48,7 +48,6 @@ const
 var
   Hauptfenster: THauptfenster;
   MoveDirection: TMoveDirection;
-  MoveDirectionAlt: TMoveDirection; //Überprüfung, ob neue Richtung ausgewählt
   Score:integer=0;                   // Speichert den aktuellen Punktestand
 
   //Variaben für Snwanz
@@ -192,16 +191,11 @@ begin
     Case MoveDirection of
     TMoveDirection.up:                        //Move Snake Up by Delta Pixels
       begin
-        if MoveDirectionAlt<>down then
-        begin
         NewCord := Kopf.Top - Delta;
         if NewCord < (HUDTrenner.Top + HUDTrenner.Height) then                   //If snake moves out of Window Teleport down
           Kopf.Top := NewCord + Hauptfenster.Height - (HUDTrenner.Top + HUDTrenner.Height)
         else                                  //else just move up
           Kopf.Top := NewCord;
-        end
-        else
-          MoveDirection:=up;
       end;
 
     TMoveDirection.down:                      //Move Snake Down by Delta Pixels
@@ -265,7 +259,7 @@ begin
     //Kollision zwischen Kopf und Schwanz
     for i:= 0 to Schwanzanzahl do
     begin
-      if (Kopf.Top = Schwanz[i].Top) and (Kopf.Left = Schwanz[i].Left) then
+      if (Kopf.Top = Schwanz[i].Top) and (Kopf.Left = Schwanz[i].Left) and (Schwanz[i].Visible=true) then
         begin
         //------------------SPIEL ABBRUCH-----------------------
         GameTick.Enabled:=False;
