@@ -1274,9 +1274,9 @@ object Hauptfenster: THauptfenster
     Visible = False
   end
   object HighscoreLabel: TLabel
-    Left = 128
+    Left = 88
     Height = 32
-    Top = 200
+    Top = 184
     Width = 336
     Caption = 'HighscoreLabel'
     Font.Color = clWhite
@@ -1287,9 +1287,9 @@ object Hauptfenster: THauptfenster
     ParentFont = False
   end
   object LastScore: TLabel
-    Left = 5
+    Left = 88
     Height = 32
-    Top = 235
+    Top = 232
     Width = 216
     Caption = 'LastScore'
     Font.Color = clWhite

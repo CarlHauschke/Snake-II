@@ -176,7 +176,7 @@ end;
 procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
-  i:integer;
+  i,high:integer;
 begin
     //alte Koordinaten aktualisieren
     Kopfcord.Left:=Kopf.Left;
@@ -254,6 +254,39 @@ begin
 
         //Schlange anfügen
         Schwanzerstellen;
+    end;
+
+    //Kollision zwischen Kopf und Schwanz
+    for i:= 0 to Schwanzanzahl do
+    begin
+      if (Kopf.Top = Schwanz[i].Top) and (Kopf.Left = Schwanz[i].Left) then
+        begin
+        //------------------SPIEL ABBRUCH-----------------------
+        GameTick.Enabled:=False;
+        high:=Highscore;
+
+        //Prüfen, ob es neuen Highscore gibt
+        if score > high then
+        begin
+          writeScore(Score);
+        end;
+
+        //HUD ausblenden
+        HUDTrenner.Visible:=false;
+        HUDTextScore.Visible:=false;
+        HUDScore.Visible:=false;
+
+        // Menü wieder einblenden
+        Start.Visible:=True;
+        HighscoreLabel.Visible:=True;
+        LastScore.Visible:=True;
+        LastScore.Caption:=     'Last Score:  '+ inttostr(Score);
+        HighscoreLabel.Caption:='Highscore:   '+ inttostr(Highscore);
+
+        //Schlange und Essen ausblenden
+        Kopf.Visible := false;
+        Essen.Visible := false;
+        end;
     end;
 end;
 
