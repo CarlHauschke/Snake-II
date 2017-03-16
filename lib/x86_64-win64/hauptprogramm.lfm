@@ -1234,7 +1234,7 @@ object Hauptfenster: THauptfenster
   object Start: TBitBtn
     Left = 155
     Height = 48
-    Top = 200
+    Top = 275
     Width = 190
     Caption = 'Start'
     OnClick = StartClick
@@ -1272,6 +1272,32 @@ object Hauptfenster: THauptfenster
     ParentColor = False
     ParentFont = False
     Visible = False
+  end
+  object HighscoreLabel: TLabel
+    Left = 88
+    Height = 32
+    Top = 184
+    Width = 336
+    Caption = 'HighscoreLabel'
+    Font.Color = clWhite
+    Font.Height = -33
+    Font.Name = 'Terminal'
+    Layout = tlCenter
+    ParentColor = False
+    ParentFont = False
+  end
+  object LastScore: TLabel
+    Left = 88
+    Height = 32
+    Top = 232
+    Width = 216
+    Caption = 'LastScore'
+    Font.Color = clWhite
+    Font.Height = -33
+    Font.Name = 'Terminal'
+    Layout = tlCenter
+    ParentColor = False
+    ParentFont = False
   end
   object GameTick: TTimer
     Enabled = False

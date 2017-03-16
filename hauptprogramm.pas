@@ -19,6 +19,8 @@ type
     HUDScore: TLabel;
     HUDTextScore: TLabel;
     HUDTrenner: TShape;
+    HighscoreLabel: TLabel;
+    LastScore: TLabel;
     Start: TBitBtn;
     Essen: TImage;
     Kopf: TImage;
@@ -47,11 +49,16 @@ var
   Hauptfenster: THauptfenster;
   MoveDirection: TMoveDirection;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
+
   //Variaben für Snwanz
   Schwanzanzahl:integer=-1;   //Speichert die Anzahl an Schwanzelementen
   Schwanz: array of TImage;   //Speichert die Schwanzelemente
   Schlangencord: array of TSchlangencord; //Speichert die Koordinaten, an dennen sich Schlangenelement vorher befunden hat
   Kopfcord:TSchlangenCord;
+
+  //Variablen für Dateiverwaltung
+  ScoreText: textfile;
+  ScoreFile: string;
 
 implementation
 
@@ -59,6 +66,27 @@ implementation
 
 { THauptfenster }
 
+// Highscore lesen
+function Highscore:integer ;
+var  HScore: string;
+begin
+  AssignFile(ScoreText,ScoreFile);
+  Reset(ScoreText);
+  readln(ScoreText,HScore);
+  CloseFile(ScoreText);
+  Highscore:=strtoint(HScore);
+end;
+
+// Highscore schreiben
+procedure writeScore(Score: integer);
+begin
+  AssignFile(ScoreText,ScoreFile);
+  Rewrite(ScoreText);
+  writeln(ScoreText,inttostr(Score));
+  CloseFile(ScoreText);
+end;
+
+//Objekt an zufällige Koordinaten bewegen
 function RandomCord(Sender: TImage): boolean;
 begin
   //Setzt Objekt an zufällige Koordinaten Auf Bildschirm
@@ -69,6 +97,7 @@ begin
   //(Hauptfenster.HUDTrenner.Top + TShape.HUDTrenner.Height)
 end;
 
+//Erstellung des Hauptfensters
 procedure THauptfenster.FormCreate(Sender: TObject);
 begin
   //Schwanz.SchwanzCreate(Schwanz);
@@ -76,8 +105,23 @@ begin
   //Fenster Mittig auf Bildschirm platzieren
   Hauptfenster.Top:= (Screen.Height - Hauptfenster.Height) div 2;
   Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
+  //Highscore einlesen
+  ScoreFile:=GetAppConfigDir(false)+'\highscore.txt';             //Datei festlegen
+  // Prüfen, ob Dateipfad existier, ansonsten anlegen
+  if not FileExists(ScoreFile) then
+  begin
+    CreateDir(GetAppConfigDir(false));
+    AssignFile(ScoreText,ScoreFile);
+    Rewrite(ScoreText);
+    writeln(ScoreText,inttostr(Score));
+    CloseFile(ScoreText);
+  end;
+  //Score und Highscore Felder ausfüllen
+  LastScore.Caption:=     'Last Score:  '+ inttostr(Score);
+  HighscoreLabel.Caption:='Highscore:   '+ inttostr(Highscore);
 end;
 
+//Spiel starten knopf
 procedure THauptfenster.StartClick(Sender: TObject);
 begin
   // Groesse von Kopf, Essen und Schwanz an Bewegungsabstand anpassen
@@ -90,8 +134,13 @@ begin
   RandomCord(Kopf);
   RandomCord(Essen);
 
-  // Start Knopf ausblenden
+  // Start Knopf und Score anzeigen ausblenden
   Start.Visible:=False;
+  HighscoreLabel.Visible:=False;
+  LastScore.Visible:=False;
+
+  // Score zurücksetzen
+  Score:=0;
 
   // HUD Einblenden
   HUDTrenner.Visible:=true;
@@ -107,6 +156,7 @@ begin
   Essen.Visible := True;
 end;
 
+//Tastendruck registrieren
 procedure THauptfenster.FormKeyDown(Sender: TObject; var Key: Word; Shift: TShiftState
   );
 begin
@@ -122,6 +172,7 @@ begin
   end;
 end;
 
+//GameTick
 procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
@@ -206,6 +257,7 @@ begin
     end;
 end;
 
+//Neuen Schwanz anhängen
 function THauptfenster.Schwanzerstellen: boolean;
 begin
   Schwanzanzahl:=Schwanzanzahl+1;
