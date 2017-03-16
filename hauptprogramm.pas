@@ -16,14 +16,17 @@ type
 
   // Hauptfenster
   THauptfenster = class(TForm)
+    Hilfe: TImage;
     HUDScore: TLabel;
     HUDTextScore: TLabel;
     HUDTrenner: TShape;
     HighscoreLabel: TLabel;
+    Title: TLabel;
     LastScore: TLabel;
     Essen: TImage;
     Kopf: TImage;
     GameTick: TTimer;
+    HelpText: TMemo;
     Start: TImage;
     procedure StartClick(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -134,10 +137,13 @@ begin
   RandomCord(Kopf);
   RandomCord(Essen);
 
-  // Start Knopf und Score anzeigen ausblenden
+  // Start Knopf, Hilfe, Titel und Score anzeigen ausblenden
   Start.Visible:=False;
   HighscoreLabel.Visible:=False;
   LastScore.Visible:=False;
+  Hilfe.Visible:=false;
+  HelpText.Visible:=false;
+  Title.Visible:=false;
 
   // Score zurücksetzen
   Score:=0;
@@ -289,6 +295,9 @@ begin
         LastScore.Visible:=True;
         LastScore.Caption:=     'Last Score:  '+ inttostr(Score);
         HighscoreLabel.Caption:='Highscore:   '+ inttostr(Highscore);
+        Hilfe.Visible:=true;
+        HelpText.Visible:=true;
+        Title.Visible:=true;
 
         //Schlange und Essen ausblenden
         Kopf.Visible := false;
