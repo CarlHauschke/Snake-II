@@ -45,6 +45,7 @@ const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
   //sowie die Groesse der Grafiken
   Delta=25;
+  Mindestlaenge=5;
 var
   Hauptfenster: THauptfenster;
   MoveDirection: TMoveDirection;
@@ -91,7 +92,6 @@ function RandomCord(Sender: TImage): boolean;
 begin
   //Setzt Objekt an zufällige Koordinaten Auf Bildschirm
   //Berücksichtig HUD
-  randomize;
   Sender.Top:= ((random(Hauptfenster.Height - (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) + (Hauptfenster.HUDTrenner.Top + Hauptfenster.HUDTrenner.Height)) div Delta)* Delta;
   Sender.Left:= (random(Hauptfenster.Height) div Delta)* Delta;
   //(Hauptfenster.HUDTrenner.Top + TShape.HUDTrenner.Height)
@@ -100,7 +100,7 @@ end;
 //Erstellung des Hauptfensters
 procedure THauptfenster.FormCreate(Sender: TObject);
 begin
-  //Schwanz.SchwanzCreate(Schwanz);
+  randomize; //Randomize in RandomCord funktioniert nicht, da mehrmals nahezu gleiche Zufallszahlen berechnet werden
   Hauptfenster.Color:=0;
   //Fenster Mittig auf Bildschirm platzieren
   Hauptfenster.Top:= (Screen.Height - Hauptfenster.Height) div 2;
@@ -141,6 +141,9 @@ begin
 
   // Score zurücksetzen
   Score:=0;
+
+  //Schlange zurücksetzen
+  Schwanzanzahl:=-1;
 
   // HUD Einblenden
   HUDTrenner.Visible:=true;
@@ -186,6 +189,10 @@ begin
       Schlangencord[i].Left:=Schwanz[i].Left;
       Schlangencord[i].Top:=Schwanz[i].Top;
     end;
+
+    //Schlangenmindestlänge festlegen
+    if Schwanzanzahl<Mindestlaenge then
+      Schwanzerstellen;
 
     //Schlangenkopf bewegen
     Case MoveDirection of
@@ -301,7 +308,7 @@ begin
   Schwanz[Schwanzanzahl]:=TImage.Create(Kopf);     // Schwanzelemnt in neuen Platz einfügen
   with Schwanz[Schwanzanzahl] do
   begin
-    Picture.LoadFromFile('Bilder\Schwanz1.png');
+    Picture.LoadFromFile('Bilder\Schwanz3.png');
     Top:=50;
     Left:=50;
     Width:=Delta;
