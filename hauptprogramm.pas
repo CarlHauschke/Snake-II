@@ -34,6 +34,11 @@ type
     { public declarations }
   end;
 
+  TSchlangenCord=record                 //Speichert die Koordinaten, an dennen sich Schlangenelement vorher befunden hat
+    Top:integer;                    //Position von links
+    Left:Integer;                   //Position von rechts
+  end;
+
 const
   //Bestimmte Abstand zwischen Teleportationen der Schlange,
   //sowie die Groesse der Grafiken
@@ -43,8 +48,10 @@ var
   MoveDirection: TMoveDirection;
   Score:integer=0;                   // Speichert den aktuellen Punktestand
   //Variaben für Snwanz
+  Schwanzanzahl:integer=-1;   //Speichert die Anzahl an Schwanzelementen
   Schwanz: array of TImage;   //Speichert die Schwanzelemente
-  Schwanzanzahl:integer=0;   //Speichert die Anzahl an Schwanzelementen
+  Schlangencord: array of TSchlangencord; //Speichert die Koordinaten, an dennen sich Schlangenelement vorher befunden hat
+  Kopfcord:TSchlangenCord;
 
 implementation
 
@@ -118,7 +125,18 @@ end;
 procedure THauptfenster.GameTickTimer(Sender: TObject);
 Var
   NewCord: integer;
+  i:integer;
 begin
+    //alte Koordinaten aktualisieren
+    Kopfcord.Left:=Kopf.Left;
+    Kopfcord.Top:=Kopf.Top;
+    for i:= 0 to Schwanzanzahl do
+    begin
+      Schlangencord[i].Left:=Schwanz[i].Left;
+      Schlangencord[i].Top:=Schwanz[i].Top;
+    end;
+
+    //Schlangenkopf bewegen
     Case MoveDirection of
     TMoveDirection.up:                        //Move Snake Up by Delta Pixels
       begin
@@ -159,6 +177,18 @@ begin
       end;
     end;
 
+    //Schwanz bewegen
+    if Schwanzanzahl > -1 then
+    begin
+      Schwanz[0].Left:=Kopfcord.Left;
+      Schwanz[0].Top:=Kopfcord.Top;
+      for i:= 1 to Schwanzanzahl do
+      begin
+        Schwanz[i].Left:=Schlangencord[i-1].Left;
+        Schwanz[i].Top:=Schlangencord[i-1].Top;
+      end;
+    end;
+
     // Kollision zwischen Kopf und Essen
     if  (Essen.top  = Kopf.top) and (Essen.left = Kopf.left)
     then
@@ -179,14 +209,14 @@ end;
 function THauptfenster.Schwanzerstellen: boolean;
 begin
   Schwanzanzahl:=Schwanzanzahl+1;
-  if Schwanzanzahl>0 then
-  SetLength(Schwanz,Schwanzanzahl);    // Array um 1 Platz vergrößern
+  SetLength(Schwanz,Schwanzanzahl+1);    // Array um 1 Platz vergrößern
+  SetLength(Schlangencord,Schwanzanzahl+1);
   Schwanz[Schwanzanzahl]:=TImage.Create(Kopf);     // Schwanzelemnt in neuen Platz einfügen
   with Schwanz[Schwanzanzahl] do
   begin
     Picture.LoadFromFile('Bilder\Schwanz1.png');
-    Top:=Kopf.Top;
-    Left:=Kopf.Left;
+    Top:=50;
+    Left:=50;
     Width:=Delta;
     Height:=Delta;
     Stretch:=true;
@@ -195,6 +225,17 @@ begin
     Parent:=Hauptfenster;                         //Ordnet Schlangenelement Hauptfenster zu
                                                   //dadurch wird es auch erst angezeigt
   end;
+  if Schwanzanzahl < 1 then                       //Wenn noch kein Schanz existiert, Koordinaten von Kopf nehmen
+  begin
+    Schwanz[Schwanzanzahl].Top:=Kopfcord.Top;
+    Schwanz[Schwanzanzahl].Left:=Kopfcord.Left;
+  end else
+  begin                                           //Sonst Koordinaten von vorangestelltem Schwanz nehmen
+    Schwanz[Schwanzanzahl].Top:=Schlangencord[Schwanzanzahl-1].Top;
+    Schwanz[Schwanzanzahl].Left:=Schlangencord[Schwanzanzahl-1].Left;
+  end;
+  if assigned(Schwanz[Schwanzanzahl]) then
+    Schwanzerstellen:=true
 end;
 
 end.
