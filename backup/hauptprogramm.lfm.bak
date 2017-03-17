@@ -1295,7 +1295,6 @@ object Hauptfenster: THauptfenster
     Height = 48
     Top = 235
     Width = 190
-    Enabled = False
     OnClick = StartClick
     Picture.Data = {
       1754506F727461626C654E6574776F726B47726170686963204D000089504E47
@@ -1924,6 +1923,7 @@ object Hauptfenster: THauptfenster
     Top = 432
     Width = 454
     Color = clBlack
+    Enabled = False
     Font.Color = clWhite
     Font.Height = -15
     Font.Name = 'Terminal'

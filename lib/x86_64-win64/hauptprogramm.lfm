@@ -1931,7 +1931,7 @@ object Hauptfenster: THauptfenster
       'So funktioniert das Spiel:'
       'Die Schlange wird mit den Pfeiltasten gesteuert und waechst, wenn sie Essen bekommt, '
       'welches zufaellig auf dem Spielfeld platziert wird.'
-      'Das Spiel ist zu ende, wenn sich die Schlange selbst in den Weg kommt.'
+      'Das Spiel ist zu Ende, wenn sich die Schlange selbst in den Weg kommt.'
     )
     ParentFont = False
     ReadOnly = True

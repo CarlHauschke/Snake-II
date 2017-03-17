@@ -109,7 +109,7 @@ begin
   Hauptfenster.Top:= (Screen.Height - Hauptfenster.Height) div 2;
   Hauptfenster.Left:= (Screen.Width - Hauptfenster.Width) div 2;
   //Highscore einlesen
-  ScoreFile:=GetAppConfigDir(false)+'\highscore.txt';             //Datei festlegen
+  ScoreFile:=GetAppConfigDir(false)+'\highscore.txt';             //Datei festlegen (%appdata%)
   // Prüfen, ob Dateipfad existiert, ansonsten anlegen
   if not FileExists(ScoreFile) then
   begin
